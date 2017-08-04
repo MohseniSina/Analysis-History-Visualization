@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+
+<meta charset="utf-8">
+
+<head>
+<title>Analysis History Visualization</title>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" href="./styles/simple-style.css">
+	<link rel="stylesheet" href="./libraries/font-awesome-4.7.0/css/font-awesome.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+</head>
+
+<body>
+
+<div id="panel">
+
+	<div id="panelCaller"> Control Panel  &nbsp;  &nbsp;</div>
+
+	<br />
+	<br />
+	<p1> &nbsp; &nbsp; &nbsp; Select a Dataset: </p1>
+	<select id="sources_dataset" name="sources_dataset">
+		<option value = 1,"Arms" selected>Arms Dealing</option>
+		<option value = 2,"Terrorist">Terrorist Activity</option>
+		<option value = 3,"Disappearance">Employees Disappearance</option>
+	</select>​
+
+	<br />
+	<br />
+
+	<p1> &nbsp; &nbsp; &nbsp; Select Participant: </p1>
+	<select id="json_sources" name="json_sources">
+	<option value ="P1" selected>P1</option>
+    <option value ="P2">P2</option>
+	<option value ="P3">P3</option>
+	<option value ="P4">P4</option>
+	<option value ="P5">P5</option>
+	<option value ="P6">P6</option>
+	<option value ="P7">P7</option>
+	<option value ="P8">P8</option>
+	</select>​
+
+	<br />
+	<br />
+
+	<p3> &nbsp; &nbsp; &nbsp; Number of Topics: </p3>
+	<select id="classNum" name="classNum">
+		<option value ="3">3</option>
+		<option value ="4">4</option>
+		<option value ="5">5</option>
+		<option value ="6" selected>6</option>
+		<option value ="7">7</option>
+		<option value ="8">8</option>
+		<option value ="9">9</option>
+		<option value ="10" >10</option>
+	</select>​
+
+	<!-- <p2>  &nbsp; Threads Type: </p2> -->
+	<!-- <select id="thread_type" name="thread_type"> -->
+		<!-- <option value ="topicThread" >Topic Threads</option> -->
+		<!-- <option value ="topicInterest">Topic Interests</option> -->
+		<!-- <option value ="analysistask" selected>Segmented Tasks</option> -->
+		<!-- <option value ="analysistask2">Segmented Tasks 2</option> -->
+	<!-- </select>​ -->
+
+	<br />
+	<br />
+	<br />
+	<br /> &nbsp; &nbsp; &nbsp; Control Pannel:
+
+	<form name="formSection">
+		<br />
+		<g>
+		&nbsp; &nbsp; &nbsp;&nbsp;<input type="checkbox" id="cluster_checkbox" name="cluster_checkbox">Provenance Clustering</br>
+		&nbsp; &nbsp; &nbsp;&nbsp;<input type="checkbox" id="report_checkbox" name="report_checkbox">Generate Reports</br>
+		&nbsp; &nbsp; &nbsp;&nbsp;<input type="checkbox" id="thinkAloud_checkbox" name="thinkAloud_checkbox">Think-aloud Segments</br>
+		</g>
+	</form>
+
+	</br>
+	</br>
+	</br>
+	</br>
+	</br>
+
+			&nbsp; &nbsp; &nbsp; Time distance:
+	</br>
+	  	<div id="time_slider">
+			<p2  style= "position: absolute;">
+			&nbsp; &nbsp; &nbsp;&nbsp;	<input type="range" min="1" max="50" value = "25" id="Timescale" style="width: 300px; height: 20px; writing-mode: bt-lr; ">
+			</p2> 
+		</div>
+	</br>
+	</br>
+	</br>
+			&nbsp; &nbsp; &nbsp; Topic distance:
+	</br>
+	
+		<div id="topic_slider">
+			<p2  style= "position: absolute;">
+			&nbsp; &nbsp; &nbsp;&nbsp;	<input type="range" min="1" max="50" value = "25" id="Timescale" style="width: 300px; height: 20px; writing-mode: bt-lr; ">
+			</p2> 
+		</div>
+	</br>
+	</br>
+	</br>
+			&nbsp; &nbsp; &nbsp; User action distance:
+	</br>
+		<div id="action_slider">
+			<p2  style= "position: absolute;">
+			&nbsp; &nbsp; &nbsp;&nbsp;	<input type="range" min="1" max="50" value = "25" id="Timescale" style="width: 300px; height: 20px; writing-mode: bt-lr; ">
+			</p2> 
+		</div>
+	</br>
+	</br>
+	</br>
+	</br>
+	</br>
+	</br>
+	</br>
+	</br>
+	</br>
+
+	
+	&nbsp; &nbsp; &nbsp; Time Segments:  <input type="button" value="Download" onclick="saveIt()"> 
+	</br>
+	</br>
+	&nbsp; &nbsp; &nbsp;  Segmentation Error:  <input type="button" value="Download" onclick="saveIt2()">
+	
+    </br>
+	</br>
+	</br>
+	</br>
+</div>
+
+<br />
+<br />
+	<!-- <svg width="960" height="500"></svg> -->
+	<div id="chartDiv" ></div>	
+	<script src="./scripts/main.js"></script>
+</body>
+</html>

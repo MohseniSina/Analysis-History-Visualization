@@ -1,0 +1,124 @@
+body {
+  font: 14px sans-serif;
+  font-weight: bold;
+}
+
+.chart {
+    background-color: white;
+    shape-rendering: auto;
+    border-style: solid;
+    border-color: #d3d3d3;
+ }
+ 
+.axis path,
+.axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}
+
+.axis text {
+    font-family: sans-serif;
+    font-size: 12px;
+}
+
+* { margin: 0; }
+
+#panel {
+
+  position: fixed;
+
+  background: #003399;
+  color: #e6e6ff;
+  opacity: .85;
+  height: 98%;
+  width: 550px;
+  left: -550px;
+  	-webkit-transition: all .8s ease-in-out;
+	-moz-transition: all .8s ease-in-out;
+	-o-transition: all .8s ease-in-out;
+	transition: all .8s ease-in-out;
+}
+#panel:hover {
+  left: 0px;
+}
+
+#panelCaller {
+  position: absolute;
+  top: 5px;
+  width: 95px;
+  left: 550px;        /* same as #panel width */
+  background: #003399;
+  opacity: .85;
+}
+
+
+
+ .text0 {
+    fill: red;
+ }
+ 
+ .text1 {
+    fill: green;
+ }
+ 
+ .text2 {
+    fill:steelblue;
+ }
+ 
+ .text3 {
+    fill: yellow;
+ }
+ 
+ .text4 {
+    fill: purple;
+ }
+ 
+ .text5 {
+    fill:brown;
+ }
+ 
+ .node {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+.link {
+  stroke: #999;
+  stroke-opacity: .6;
+}
+
+
+.track {
+  stroke: #000;
+  stroke-opacity: 0.3;
+  stroke-width: 10px;
+}
+
+div.relative {
+    position: relative;
+    width: 800px;
+    height: 350px;
+    border: 3px solid #73AD21;
+}
+
+div.absolute {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.track-inset {
+  stroke: #ddd;
+  stroke-width: 8px;
+}
+
+.track-overlay {
+  pointer-events: stroke;
+  stroke-width: 50px;
+  cursor: crosshair;
+}
+
+.tooltip {
+	background: #D791E8;
+}
