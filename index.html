@@ -43,6 +43,19 @@
 
 	<br />
 	<br />
+	<br />
+	<br /> &nbsp; &nbsp; &nbsp; Control Pannel:
+
+	<form name="formSection">
+		<br />
+		<g>
+		&nbsp; &nbsp; &nbsp;&nbsp;<input type="checkbox" id="cluster_checkbox" name="cluster_checkbox">Provenance Clustering</br>
+		&nbsp; &nbsp; &nbsp;&nbsp;<input type="checkbox" id="report_checkbox" name="report_checkbox">Generate Reports</br>
+		&nbsp; &nbsp; &nbsp;&nbsp;<input type="checkbox" id="thinkAloud_checkbox" name="thinkAloud_checkbox">Think-aloud Segments</br>
+		</g>
+	</form>
+	
+	<br />
 
 	<p3> &nbsp; &nbsp; &nbsp; Number of Topics: </p3>
 	<select id="classNum" name="classNum">
@@ -55,29 +68,7 @@
 		<option value ="9">9</option>
 		<option value ="10" >10</option>
 	</select>​
-
-	<!-- <p2>  &nbsp; Threads Type: </p2> -->
-	<!-- <select id="thread_type" name="thread_type"> -->
-		<!-- <option value ="topicThread" >Topic Threads</option> -->
-		<!-- <option value ="topicInterest">Topic Interests</option> -->
-		<!-- <option value ="analysistask" selected>Segmented Tasks</option> -->
-		<!-- <option value ="analysistask2">Segmented Tasks 2</option> -->
-	<!-- </select>​ -->
-
-	<br />
-	<br />
-	<br />
-	<br /> &nbsp; &nbsp; &nbsp; Control Pannel:
-
-	<form name="formSection">
-		<br />
-		<g>
-		&nbsp; &nbsp; &nbsp;&nbsp;<input type="checkbox" id="cluster_checkbox" name="cluster_checkbox">Provenance Clustering</br>
-		&nbsp; &nbsp; &nbsp;&nbsp;<input type="checkbox" id="report_checkbox" name="report_checkbox">Generate Reports</br>
-		&nbsp; &nbsp; &nbsp;&nbsp;<input type="checkbox" id="thinkAloud_checkbox" name="thinkAloud_checkbox">Think-aloud Segments</br>
-		</g>
-	</form>
-
+	
 	</br>
 	</br>
 	</br>
@@ -88,7 +79,7 @@
 	</br>
 	  	<div id="time_slider">
 			<p2  style= "position: absolute;">
-			&nbsp; &nbsp; &nbsp;&nbsp;	<input type="range" min="1" max="50" value = "25" id="Timescale" style="width: 300px; height: 20px; writing-mode: bt-lr; ">
+			&nbsp; &nbsp; &nbsp;&nbsp;	<input type="range" min="0" max="100" value = "100" id="time_weight_slider" style="width: 300px; height: 20px; writing-mode: bt-lr; ">
 			</p2> 
 		</div>
 	</br>
@@ -99,7 +90,7 @@
 	
 		<div id="topic_slider">
 			<p2  style= "position: absolute;">
-			&nbsp; &nbsp; &nbsp;&nbsp;	<input type="range" min="1" max="50" value = "25" id="Timescale" style="width: 300px; height: 20px; writing-mode: bt-lr; ">
+			&nbsp; &nbsp; &nbsp;&nbsp;	<input type="range" min="0" max="100" value = "1" id="topic_weight_slider" style="width: 300px; height: 20px; writing-mode: bt-lr; ">
 			</p2> 
 		</div>
 	</br>
@@ -109,7 +100,7 @@
 	</br>
 		<div id="action_slider">
 			<p2  style= "position: absolute;">
-			&nbsp; &nbsp; &nbsp;&nbsp;	<input type="range" min="1" max="50" value = "25" id="Timescale" style="width: 300px; height: 20px; writing-mode: bt-lr; ">
+			&nbsp; &nbsp; &nbsp;&nbsp;	<input type="range" min="0" max="400" value = "50" id="action_weight_slider" style="width: 300px; height: 20px; writing-mode: bt-lr; ">
 			</p2> 
 		</div>
 	</br>
