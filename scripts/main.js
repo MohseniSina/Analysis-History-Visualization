@@ -1,6 +1,7 @@
-
-var time_weight = 100, topic_weight = 0, action_weight = 400;
+var hidRect;
+var time_weight = 100, topic_weight = 0, action_weight = 400, cluster_weight = 20;
 var max_y = 800;
+var each_time_sec;
 // var topic_distance;
 var colors = d3.scaleOrdinal(d3.schemeCategory10); 
 
@@ -36,7 +37,7 @@ var y_scale = d3.scaleLinear()
 	.domain([dataYRange.min, dataYRange.max])
     .range([height - dataYRange.max, 0 + points_size]);
 
-var xAxis = d3.axisBottom(x_scale);
+// var xAxis = d3.axisBottom(x_scale);
 
 //  var yAxis = d3.axisLeft(y_scale);
 
@@ -58,13 +59,6 @@ var zoomRect = svg.append("rect")
     .attr("fill", "none")
     .attr("pointer-events", "all")
     .call(zoom);
-	
-var hidRect = svg.append("rect")
-	.attr("class","hide_rect")
-    .attr("width", width)
-    .attr("height", 20)
-    .attr("fill", "white")
-    .attr("transform", "translate(0," + height + ")");
 
 
 d3.select("#time_weight_slider").on("input", function() {
@@ -82,6 +76,26 @@ d3.select("#action_weight_slider").on("input", function() {
    	distanceFunction();
 });
 
+d3.select("#clustering_ratio_slider").on("input", function() {
+	cluster_weight = +this.value;
+   	distanceFunction();
+});
+
+    d3.selection.prototype.moveToBack = function() {
+        return this.each(function() {
+            var firstChild = this.parentNode.firstChild;
+            if (firstChild) {
+                this.parentNode.insertBefore(this, firstChild);
+            }
+        });
+    };
+  
+  d3.selection.prototype.moveToFront = function() {
+    return this.each(function(){
+      this.parentNode.appendChild(this);
+    });
+  };
+  
 d3.json("data/Dataset_1/Topic_Events_Provenance/Arms_P8_timetopics_3.json", function(jsondata) {
 	
 	dataXRange.min = 0 
@@ -101,7 +115,14 @@ d3.json("data/Dataset_1/Topic_Events_Provenance/Arms_P8_timetopics_3.json", func
 	circles = chart_svg.append("g").attr("class","datapoint").selectAll(".datapoint").data(jsondata).enter()
 		.append("circle").attr("class","datapoints")
 		.attr("cx", function(d){return x_scale(d.Time);})
-		.attr("cy", function(d){return y_scale(d.Duration);})
+		.attr("cy", function(d){
+			if ((d.InteractionType == "highlight") | (d.InteractionType == "bookmark_highlights") | (d.InteractionType == "create_note") | (d.InteractionType == "writing_notes") | (d.InteractionType == "connection")) {
+				d.y_distance = Math.floor(Math.random() * (max_y - (2*max_y)/3 + 1)) + (2*max_y)/3;
+			}else{ 
+				d.y_distance = Math.floor(Math.random() * (max_y/3 - 10 + 1)) + 10
+			}  
+			return y_scale(d.y_distance); 
+				})
 		.attr("r",function(d){
 			// var temp = points_size * (1 + (d.Duration)/100);   // .toFixed()   // dataYRange.min
 			if ((d.InteractionType == "open_document")) {
@@ -139,27 +160,36 @@ d3.json("data/Dataset_1/Topic_Events_Provenance/Arms_P8_timetopics_3.json", func
 			
 			});
 			
-	var each_sec = dataXRange.max / 20;
+	hidRect = svg.append("rect")
+		.attr("class","hide_rect")
+		.attr("width", width)
+		.attr("height", 2)
+		.attr("fill", "black")
+		.attr("x", 0) 
+		.attr("y", height)
+		// .attr("transform", "translate(0," + height + ")");
+	
+	each_time_sec = dataXRange.max / 20;
 	var counter = 0
 
 	timeBox = chart_svg.append("g").attr("class","time_box").selectAll(".time_box").data(jsondata).enter()
 		.append("rect").attr("class","time_boxs")
 		.each(function(d){
 			
-  			if (d.Time < each_sec*counter) {   
+  			if (d.Time < each_time_sec*counter) {   
 				d3.select(this).remove();
 			}else{
 				counter += 1;
-				console.log(d.Time)
 			}
 		})
 		.attr("width", 2)
-    	.attr("height", 25)
+    	.attr("height", 10)
     	.attr("fill", "red")
     	// .attr("transform", "translate(" + d.Time + " ," + height + ")");
     	.attr("x", function(d){return x_scale(d.Time);}) 
 		.attr("y", height)
-			
+		
+	// svg.selectAll(".time_boxs").moveToFront();
 	// interaction_data = jsondata;
 	topicDistance(jsondata);     // comment  
 	
@@ -169,6 +199,9 @@ d3.json("data/Dataset_1/Topic_Events_Provenance/Arms_P8_timetopics_3.json", func
 		//dataYRange.max = 100
 	  
 	updateWindow()
+	
+	
+	
 });
 
 function topicDistance(input){
@@ -237,83 +270,94 @@ function distanceFunction(){
 	// console.log(time_weight, topic_weight, action_weight)
 	var temp_topic = 0;
 	var temp_time = 0;
-	var temp_color = 0
-	var k = 1;
+	var temp_color = 0;
+	
+	var k_topic = 1;
+	var k_time = 1/100;
+	var k_action = 1/50;
+	
+	var max_dist = 0;
 	var temp_dur;
-	dataXRange.max = 0;
+	// dataXRange.max = 0;   // uncomment to update page limits 
+	// dataYRange.max = 0;
+	
+	
+	var counter = 0
+	var time_seg = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 	
 	chart_svg.selectAll(".datapoints")
 			.attr("cx", function(d,i){
-				if (time_weight > 0){
-					if (d.distance < 0.3){//if ((topic_weight * d.distance) < 20) {
-					d.distance = 0
-					}
-					d.x_distance = (((d.Time - temp_time) * time_weight) / 100) + (topic_weight * k * d.distance);
-				}else{
-					// if (d.distance < 1) {d.distance = 0}
-					if (d.distance < 2){//if ((topic_weight * d.distance) < 20) {
-					d.distance = 0
-					d.x_distance = topic_weight * k * d.distance;
-					}else{
-					d.x_distance = topic_weight * k * d.distance;
-					}
+				if (time_weight > 0){  // Time n' Topic distance both
+					// if (d.distance < 0.1){  // some cheating might be necessary 
+						// d.distance = 0;
+					// }
+					d.t_distance  = d.Time - temp_time
+					d.x_distance = (d.t_distance * time_weight * k_time) + (topic_weight * k_topic * d.distance);   
+				}else{   				 // Topic distance only 
+					d.x_distance = topic_weight * k_topic * d.distance;    
 				}
+				d.cluster = d.x_distance
 				d.x_distance += temp_topic;
-				temp_topic = d.x_distance; // topic_weight * k * (d.distance);   // d.x_distance
+				temp_topic = d.x_distance; // topic_weight * k_topic * (d.distance);   // d.x_distance
 				temp_time = d.Time;
-				
 				if (dataXRange.max < d.x_distance){dataXRange.max = d.x_distance;}
+				if (max_dist < d.cluster){max_dist = d.cluster;}
 				
 				return x_scale(d.x_distance); 
 				})
-			.attr("cy", function(d){
-				
+			.attr("cy", function(d){  	 // Seperating Eploration actions and insight actions
 				if ((d.InteractionType == "highlight") | (d.InteractionType == "bookmark_highlights") | (d.InteractionType == "create_note") | (d.InteractionType == "writing_notes") | (d.InteractionType == "connection")) {
-					temp_dur = Math.floor(Math.random() * (max_y - (2*max_y)/3 + 1)) + (2*max_y)/3
-					d.y_distance = (temp_dur * action_weight) / 50
-				}else{
-					temp_dur = Math.floor(Math.random() * (max_y/3 - 10 + 1)) + 10
-					d.y_distance = (temp_dur * action_weight) / 50
-				}
+					d.y_distance = d.y_distance * action_weight * k_action;
+				}else{ 
+					d.y_distance = d.y_distance * action_weight * k_action;
+				}  
 				if (dataYRange.max < d.y_distance){dataYRange.max = d.y_distance;}
-				return y_scale(d.y_distance); 
+					return y_scale(d.y_distance); 
 				})
 			.style("fill", function(d){
-				temp_color = d.topic - 1;
-				if (d.distance == 0){
-
-					if ((d.InteractionType == "open_document")) {
-						return colors(temp_color);
-					}
-					else if (d.InteractionType == "reading_document"){
-						return colors(temp_color);
-					}else{
-						return colors(temp_color);
-					}
-
+				var threshold =  (max_dist * cluster_weight) / 100;
+				if (d.cluster > threshold){   // if all in the same group ! 
+					// var temp_color2 = temp_color;
+					// temp_color = d.topic - 1;  // change only if distance > 0.5
+					// if (temp_color == temp_color2) { temp_color = temp_color + 1;}
+					temp_color += 1;
+				}				
+				if ((d.InteractionType == "open_document")) {
+					return colors(temp_color);
+				}
+				else if (d.InteractionType == "reading_document"){
+					return colors(temp_color);
 				}else{
-					// temp_color += 1;
-					// return colors(temp_color); // return "none";
-					if ((d.InteractionType == "open_document")) {
-						return colors(temp_color);
-					}
-					else if (d.InteractionType == "reading_document"){
-						return colors(temp_color);
-					}else{
-						return colors(temp_color);
-					}
-				}					
+					return colors(temp_color);
+				}
 				
 				});
+				
+		chart_svg.selectAll(".datapoints")
+			.each(function(d){
+				//console.log(d.axis_distance);
+				if (d.Time > (each_time_sec*counter)) {   
+					time_seg[counter] = d.x_distance;
+					counter += 1;
+				}
+				else{	
+				d.axis_distance = d.Time;
+				}
+			});
 
 			
 		x_scale.domain([dataXRange.min, dataXRange.max]).range([margin.left + points_size, width - points_size]);//  .range([0 + points_size, width - points_size]);
 		y_scale.domain([dataYRange.min, dataYRange.max]).range([height - points_size - Axis_room, 0]);
 		
-		xGroup.call(xAxis.scale(x_scale)); // .attr("transform", "translate(0," + (height - Axis_room) + ")");
+		// xGroup.call(xAxis.scale(x_scale)); // .attr("transform", "translate(0," + (height - Axis_room) + ")");
 		
 		chart_svg.selectAll(".datapoints").attr("cx", function(d){return x_scale(d.x_distance); });
 		chart_svg.selectAll(".datapoints").attr("cy", function(d){return y_scale(d.y_distance); });
+		
+		
+		// console.log(time_seg);
+		
+		chart_svg.selectAll(".time_boxs").attr("x", function(d,i){d.axis_distance = time_seg[i]; return x_scale(d.axis_distance);}).attr("y", (height - Axis_room + 1));
 				
 		updateWindow()
 }
@@ -339,7 +383,7 @@ function updateWindow(){
 		x_scale.domain([dataXRange.min, dataXRange.max]).range([margin.left + points_size, width - points_size]);// .range([0, width]);
 		y_scale.domain([dataYRange.min, dataYRange.max]).range([height - points_size - Axis_room, 0]);
 		
-		xGroup.call(xAxis.scale(x_scale)).attr("transform", "translate(0," + (height - Axis_room) + ")");
+		// xGroup.call(xAxis.scale(x_scale)).attr("transform", "translate(0," + (height - Axis_room) + ")");
 		
 		chart_svg.selectAll(".datapoints").attr("cx", function(d){return x_scale(d.x_distance); });
 		chart_svg.selectAll(".datapoints").attr("cy", function(d){return y_scale(d.y_distance); });
@@ -347,15 +391,16 @@ function updateWindow(){
 		svg.selectAll(".zoom_rect").attr("width", width );
 		svg.selectAll(".zoom_rect").attr("height", height );
 
-		svg.selectAll(".hide_rect").attr("width", width).attr("transform", "translate(0," + (height - Axis_room + 1	) + ")");
+		svg.selectAll(".hide_rect").attr("width", width).attr("y", height - Axis_room + 1); //.attr("transform", "translate(0," + (height - Axis_room + 1	) + ")");
 
-		svg.selectAll(".time_boxs").attr("x", function(d){return x_scale(d.Time);}).attr("y", (height - Axis_room + 1	));
+		chart_svg.selectAll(".time_boxs").attr("x", function(d){return x_scale(d.axis_distance);}).attr("y", (height - Axis_room + 10	));
 	}
 	
 function zoomed() {
   xz_scale = d3.event.transform.rescaleX(x_scale);
-  xGroup.call(xAxis.scale(xz_scale));
+  // xGroup.call(xAxis.scale(xz_scale));
   chart_svg.selectAll(".datapoints").attr("cx", function(d){return xz_scale(d.x_distance); });
-  svg.selectAll(".time_boxs").attr("x", function(d){return xz_scale(d.Time);});
+  chart_svg.selectAll(".time_boxs").attr("x", function(d){return xz_scale(d.axis_distance );});
+  chart_svg.selectAll(".time_boxs").moveToFront();
   // d3.selectAll(".datapoints").attr("cy", function(d){ return xz_scale(d.Duration); });
 }
