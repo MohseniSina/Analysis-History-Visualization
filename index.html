@@ -3,22 +3,12 @@
 <meta charset="utf-8">
 
 <head>
-<title>Explainable Machine Learning (XAI)</title>
+<title>Analysis History Visualization</title>
 	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
 	<link rel="stylesheet" href="./styles/simple-style.css">
 	<!-- <link rel="stylesheet" href="./libraries/font-awesome-4.7.0/css/font-awesome.min.css"> -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://d3js.org/d3.v4.min.js"></script>
-	 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"
-     type="text/javascript"></script>
-    <script src="http://code.jquery.com/ui/1.8.20/jquery-ui.min.js"
-     type="text/javascript"></script>
-    <script src="http://jquery-ui.googlecode.com/svn/tags/latest/external/jquery.bgiframe-2.1.2.js"
-        type="text/javascript"></script>
-    <script src="http://jquery-ui.googlecode.com/svn/tags/latest/ui/minified/i18n/jquery-ui-i18n.min.js"
-        type="text/javascript"></script>
-        
-
 </head>
 
 <body>
@@ -29,62 +19,108 @@
 
 	<br />
 	<br />
-	<p1> &nbsp; &nbsp; &nbsp; Select Data: </p1>
-	<select id="sources_dataset" name="sources_dataset" onchange="myFunction()">
-		<option value = 1,"image">Image Recognition</option>
-		<option value = 2,"text" selected>Healthcare Text Mining</option>
+	<p1> &nbsp; &nbsp; &nbsp; Select a Dataset: </p1>
+	<select id="sources_dataset" name="sources_dataset">
+		<option value = 1,"Arms" selected>Arms Dealing</option>
+		<option value = 2,"Terrorist">Terrorist Activity</option>
+		<option value = 3,"Disappearance">Employees Disappearance</option>
 	</select>​
+
 	<br />
 	<br />
 
-	<script>
-		function myFunction() {
-		    var x = document.getElementById("myText").value;
-		    document.getElementById("demo").innerHTML = x;
-		}
-	</script>
-
-	<p1> &nbsp; &nbsp; &nbsp; Select a Classifier: </p1>
+	<p1> &nbsp; &nbsp; &nbsp; Select Participant: </p1>
 	<select id="json_sources" name="json_sources">
-		<option value ="RF" selected> Random Forest </option>
-    	<option value ="DP">Discriminant Patterns</option>
+	<option value ="P1" selected>P1</option>
+    <option value ="P2">P2</option>
+	<option value ="P3">P3</option>
+	<option value ="P4">P4</option>
+	<option value ="P5">P5</option>
+	<option value ="P6">P6</option>
+	<option value ="P7">P7</option>
+	<option value ="P8">P8</option>
 	</select>​
 
 	<br />
 	<br />
-
-	<br /> &nbsp; &nbsp; &nbsp; Number of Rules:
-	<br />
-	<br />
-	&nbsp; &nbsp; &nbsp;&nbsp; <input type="text" id="rulesNumber" value="Number of rules...">  
-	&nbsp; &nbsp; <button onclick="getText()">Enter</button>
-
-	</br>
-	</br>
-	
-    </br>
-	</br>
-	</br>
-	</br>
 	<br />
 	<br /> &nbsp; &nbsp; &nbsp; Control Pannel:
 
 	<form name="formSection">
 		<br />
 		<g>
-		&nbsp; &nbsp; &nbsp;&nbsp;<input type="checkbox" id="cluster_checkbox" name="cluster_checkbox">Control 1</br>
-		&nbsp; &nbsp; &nbsp;&nbsp;<input type="checkbox" id="report_checkbox" name="report_checkbox">Control 2</br>
+		&nbsp; &nbsp; &nbsp;&nbsp;<input type="checkbox" id="cluster_checkbox" name="cluster_checkbox">Provenance Clustering</br>
+		&nbsp; &nbsp; &nbsp;&nbsp;<input type="checkbox" id="report_checkbox" name="report_checkbox">Generate Reports</br>
+		&nbsp; &nbsp; &nbsp;&nbsp;<input type="checkbox" id="thinkAloud_checkbox" name="thinkAloud_checkbox">Think-aloud Segments</br>
 		</g>
 	</form>
 	
 	<br />
 
+	<p3> &nbsp; &nbsp; &nbsp; Number of Topics: </p3>
+	<select id="classNum" name="classNum">
+		<option value ="3">3</option>
+		<option value ="4">4</option>
+		<option value ="5">5</option>
+		<option value ="6" selected>6</option>
+		<option value ="7">7</option>
+		<option value ="8">8</option>
+		<option value ="9">9</option>
+		<option value ="10" >10</option>
+	</select>​
 	
 	</br>
 	</br>
-	&nbsp; &nbsp; &nbsp; Printable results:  <input type="button" value="Download" onclick="saveIt()"> 
 	</br>
 	</br>
+	</br>
+
+			&nbsp; &nbsp; &nbsp; Time distance:
+	</br>
+	  	<div id="time_slider">
+			<p2  style= "position: relative;">
+			&nbsp; &nbsp; &nbsp;&nbsp;	<input type="range" min="0" max="100" value = "100" id="time_weight_slider" style="width: 300px; height: 20px; writing-mode: bt-lr; ">
+			</p2> 
+		</div>
+	</br>
+	</br>
+	</br>
+			&nbsp; &nbsp; &nbsp; Topic distance:
+	</br>
+	
+		<div id="topic_slider">
+			<p2  style= "position: relative;">
+			&nbsp; &nbsp; &nbsp;&nbsp;	<input type="range" min="0" max="100" value = "0" id="topic_weight_slider" style="width: 300px; height: 20px; writing-mode: bt-lr; ">
+			</p2> 
+		</div>
+	</br>
+	</br>
+	</br>
+			&nbsp; &nbsp; &nbsp; User action distance:
+	</br>
+		<div id="action_slider">
+			<p2  style= "position: relative;">
+			&nbsp; &nbsp; &nbsp;&nbsp;	<input type="range" min="0" max="400" value = "400" id="action_weight_slider" style="width: 300px; height: 20px; writing-mode: bt-lr; ">
+			</p2> 
+		</div>
+	</br>
+	</br>
+	</br>
+	</br>
+				&nbsp; &nbsp; &nbsp; Clustering Ratio:
+	</br>
+		<div id="cluster_slider">
+			<p2  style= "position: relative;">
+			&nbsp; &nbsp; &nbsp;&nbsp;	<input type="range" min="0" max="100" value = "20" id="clustering_ratio_slider" style="width: 300px; height: 20px; writing-mode: bt-lr; ">
+			</p2> 
+		</div>
+	</br>
+	</br>
+	</br>
+	&nbsp; &nbsp; &nbsp; Time Segments:  <input type="button" value="Download" onclick="saveIt()"> 
+	</br>
+	</br>
+	&nbsp; &nbsp; &nbsp;  Segmentation Error:  <input type="button" value="Download" onclick="saveIt2()">
 	
     </br>
 	</br>
@@ -94,35 +130,8 @@
 
 <br />
 <br />
-	
-	<div id="chartDiv" ></div>
-
-	<div id="textbox" >
-		<form id="form1" runat="server">
-		        <div class="dropitems">
-		        <textarea id="TextArea" cols="65" name="S1" rows="15"></textarea>
-		        </div>
-	    </form>
-	    <!-- <br />
-	    <button onclick="getText()">Enter</button> 
-	    <button onclick="clearText()">Clear</button> -->
-	</div>
-
-	<div id="textboxbutton1" > <button onclick="getText()">Enter</button> </div>
-	<div id="textboxbutton2" > <button onclick="clearText()">Clear</button> </div>
-	
-
-    <div id="form2" class="dragitems">
-            <ul id="allfields" runat="server">
-                <li id="node1">Example 1</li> 
-                <li id="node2">Example 2</li>
-                <li id="node3">Example 3</li>
-                <li id="node4">Example 4</li>
-                <li id="node5">Example 5</li>
-            </ul>
-        </div>
-
-		
+	<!-- <svg width="960" height="500"></svg> -->
+	<div id="chartDiv" ></div>	
 	<script src="./scripts/main.js"></script>
 </body>
 </html>
