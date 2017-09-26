@@ -3,6 +3,11 @@ body {
   font-weight: bold;
 }
 
+.boxsizingBorder {
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
+}
 .chart {
     background-color: white;
     shape-rendering: auto;
@@ -47,12 +52,48 @@ body {
   position: absolute;
   top: 5px;
   width: 95px;
-  left: 550px;        /* same as #panel width */
+  left: 550px;    
   background: #003399;
   opacity: .85;
 }
 
+#textbox {
+float:left;
+position: absolute;
+  top: 150px;
+  left: 1100px;   
+  width: 95px;
+}
 
+#textboxbutton1 {
+  float:left;
+  position: absolute;
+  top: 420px;
+  left: 1100px;
+}
+
+#textboxbutton2 {
+  float:left;
+  position: absolute;
+  top: 420px;
+  left: 1180px;
+}
+
+textarea{
+  resize: none;
+  border:1px solid #999999;
+  width:400%;
+  margin:5px 0;
+  padding:3px;
+}
+
+
+#form2 {
+float:left;
+position: absolute;
+  top: 200px;
+  left: 1500px;   
+}
 
  .text0 {
     fill: red;
